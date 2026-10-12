@@ -2,15 +2,15 @@
 layout: default
 ---
 
-<article class="post-page">
-  <nav class="breadcrumb">
-    <a href="{{ '/' | relative_url }}">Trang chủ</a>
-    <span>/</span>
-    <a href="{{ '/news/' | relative_url }}">Tin tức</a>
-    <span>/</span>
-    <span>{{ page.title | truncate: 40 }}</span>
-  </nav>
+<nav class="breadcrumb post-breadcrumb">
+  <a href="{{ '/' | relative_url }}">Trang chủ</a>
+  <span>/</span>
+  <a href="{{ '/news/' | relative_url }}">Tin tức</a>
+  <span>/</span>
+  <span>{{ page.title | truncate: 40 }}</span>
+</nav>
 
+<article class="post-page">
   <header class="post-header">
     <div class="post-kicker">
       {% assign main_tag = page.tags | first %}
@@ -32,23 +32,37 @@ layout: default
     <p><b>Nguồn:</b> Bài viết gốc trên {{ page.source_name }}{% if page.source_author %} của {{ page.source_author }}{% endif %}. Nội dung trên {{ site.title }} là bản tóm tắt tiếng Việt do biên tập viên tự viết.</p>
     <a class="btn-play" href="{{ page.source_url }}" target="_blank" rel="noopener">Đọc bản gốc trên {{ page.source_name }} ↗</a>
   </aside>
-
-  {% assign others = site.posts | where_exp: "p", "p.url != page.url" %}
-  {% if others.size > 0 %}
-  <section class="related">
-    <h2>Tin khác</h2>
-    <div class="news-list">
-      {% for post in others limit: 3 %}
-        <a class="news-row" href="{{ post.url | relative_url }}">
-          <time class="news-row-date">{{ post.date | date: "%d/%m" }}</time>
-          <div class="news-row-body">
-            <h3>{{ post.title }}</h3>
-            <p>{{ post.description | truncate: 110 }}</p>
-          </div>
-          <span class="news-row-arrow" aria-hidden="true">→</span>
-        </a>
-      {% endfor %}
-    </div>
-  </section>
-  {% endif %}
 </article>
+
+{% assign others = site.posts | where_exp: "p", "p.url != page.url" %}
+{% if others.size > 0 %}
+<aside class="related post-page-related">
+  <h2>Tin khác</h2>
+  <div class="news-list">
+    {% for post in others limit: 3 %}
+      <a class="news-row" href="{{ post.url | relative_url }}">
+        <time class="news-row-date">{{ post.date | date: "%d/%m" }}</time>
+        <div class="news-row-body">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.description | truncate: 110 }}</p>
+        </div>
+        <span class="news-row-arrow" aria-hidden="true">→</span>
+      </a>
+    {% endfor %}
+  </div>
+</aside>
+{% endif %}
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": {{ page.title | jsonify }},
+  "description": {{ page.description | jsonify }},
+  "datePublished": {{ page.date | date_to_xmlschema | jsonify }},
+  "inLanguage": "vi",
+  "isAccessibleForFree": true,
+  "author": { "@type": "Organization", "name": {{ site.title | jsonify }} },
+  "publisher": { "@type": "Organization", "name": {{ site.title | jsonify }} }
+}
+</script>
