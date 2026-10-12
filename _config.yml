@@ -1,0 +1,38 @@
+# Cấu hình Jekyll cho Game Portal
+# Tài liệu: https://jekyllrb.com/docs/configuration/
+
+title: Game Portal
+description: Cổng game HTML5 miễn phí — chơi ngay trên trình duyệt.
+# Điền domain thật khi deploy, ví dụ: https://tenban.github.io
+url: ""
+baseurl: "/game-portal"
+
+# Tắt theme ngoài để dùng layout riêng trong _layouts
+theme: null
+
+markdown: kramdown
+
+collections:
+  games:
+    output: true
+    permalink: /games/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: games
+    values:
+      layout: game
+  - scope:
+      path: ""
+    values:
+      layout: default
+
+# GitHub Pages chỉ cho phép vài plugin trắng danh sách
+plugins: []
+
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor

@@ -1,0 +1,74 @@
+---
+layout: default
+---
+
+<article class="game-page">
+  <nav class="breadcrumb">
+    <a href="{{ '/' | relative_url }}">Trang chủ</a>
+    <span>/</span>
+    <span>{{ page.title }}</span>
+  </nav>
+
+  <h1 class="game-title">{{ page.title }}</h1>
+
+  <div class="game-frame-wrap">
+    <div class="game-frame" id="game-frame">
+      {% if page.embed_url %}
+        <iframe
+          src="{{ page.embed_url | relative_url }}"
+          title="{{ page.title | escape }}"
+          allow="fullscreen; gamepad; autoplay"
+          loading="lazy"></iframe>
+      {% else %}
+        <div class="game-frame-empty">
+          <p>Game này chưa có link nhúng.</p>
+          <p class="hint">Thêm <code>embed_url</code> vào front matter của file markdown.</p>
+        </div>
+      {% endif %}
+    </div>
+    <button type="button" class="btn-fullscreen" data-target="game-frame">⛶ Toàn màn hình</button>
+  </div>
+
+  <div class="game-meta">
+    <div class="game-meta-main">
+      <h2>Mô tả</h2>
+      <p>{{ page.description }}</p>
+      <div class="content">{{ content }}</div>
+    </div>
+
+    <aside class="game-meta-side">
+      <h2>Thông tin</h2>
+      <ul class="meta-list">
+        <li><span>Thể loại</span><span>{{ page.tags | join: ", " | default: "—" }}</span></li>
+        <li><span>Lượt chơi</span><span>{{ page.plays | default: "—" }}</span></li>
+        <li><span>Điện thoại</span><span>{% if page.mobile %}Hỗ trợ{% else %}Chưa hỗ trợ{% endif %}</span></li>
+      </ul>
+      <a class="btn-play" href="{{ page.embed_url | default: '#' | relative_url }}" target="_blank" rel="noopener">Mở tab mới ↗</a>
+    </aside>
+  </div>
+
+  <section class="related">
+    <h2>Game khác</h2>
+    <div class="game-grid">
+      {% assign others = site.games | where_exp: "g", "g.url != page.url" %}
+      {% for game in others limit: 4 %}
+        <a class="game-card" href="{{ game.url | relative_url }}" style="--g: {{ game.gradient | default: 'linear-gradient(135deg,#7c5cff,#22d3ee)' }}">
+          <div class="game-card-thumb"><span>{{ game.title }}</span></div>
+          <div class="game-card-body">
+            <h3>{{ game.title }}</h3>
+            <p>{{ game.description | truncate: 70 }}</p>
+            <div class="tags">{% for t in game.tags %}<span>{{ t }}</span>{% endfor %}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+  </section>
+</article>
+
+<script>
+  document.querySelector('.btn-fullscreen').addEventListener('click', function () {
+    var el = document.getElementById(this.dataset.target);
+    if (document.fullscreenElement) { document.exitFullscreen(); }
+    else { el.requestFullscreen && el.requestFullscreen(); }
+  });
+</script>

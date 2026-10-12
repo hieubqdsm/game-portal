@@ -1,0 +1,58 @@
+---
+layout: default
+title: null
+---
+
+<section class="hero">
+  <h1>🎮 Chơi game miễn phí, ngay trên trình duyệt</h1>
+  <p>Hàng trăm game HTML5 nhỏ gọn, không cần cài đặt. Bấm vào một game và chơi ngay!</p>
+</section>
+
+<section id="games">
+  <div class="section-head container" style="padding-left:20px;padding-right:20px">
+    <h2>Tất cả game (<span id="game-count">{{ site.games.size }}</span>)</h2>
+    <input type="search" class="search-box" id="game-search" placeholder="🔎 Tìm game..." autocomplete="off">
+  </div>
+
+  <div class="container">
+    <div class="game-grid" id="game-grid">
+      {% for game in site.games %}
+        <a
+          class="game-card"
+          href="{{ game.url | relative_url }}"
+          data-title="{{ game.title | downcase | escape }} {% for t in game.tags %}{{ t | downcase | escape }} {% endfor %}"
+          style="--g: {{ game.gradient | default: 'linear-gradient(135deg,#7c5cff,#22d3ee)' }}"
+        >
+          <div class="game-card-thumb"><span>{{ game.title }}</span></div>
+          <div class="game-card-body">
+            <h3>{{ game.title }}</h3>
+            <p>{{ game.description | truncate: 70 }}</p>
+            <div class="tags">{% for t in game.tags %}<span>{{ t }}</span>{% endfor %}</div>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    <p class="muted" id="no-result" hidden style="text-align:center;padding-bottom:40px">
+      Không tìm thấy game nào khớp với từ khóa.
+    </p>
+  </div>
+</section>
+
+<script>
+  var input = document.getElementById('game-search');
+  var cards = document.querySelectorAll('#game-grid .game-card');
+  var empty = document.getElementById('no-result');
+  var count = document.getElementById('game-count');
+
+  input.addEventListener('input', function () {
+    var q = this.value.trim().toLowerCase();
+    var visible = 0;
+    cards.forEach(function (card) {
+      var match = card.dataset.title.indexOf(q) !== -1;
+      card.hidden = !match;
+      if (match) visible++;
+    });
+    empty.hidden = visible > 0;
+    count.textContent = visible;
+  });
+</script>
