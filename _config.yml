@@ -12,12 +12,20 @@ theme: null
 
 markdown: kramdown
 
+# URL bài tin tức: /news/2026/10/12/ten-bai/
+permalink: /news/:year/:month/:day/:title/
+
 collections:
   games:
     output: true
     permalink: /games/:name/
 
 defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
   - scope:
       path: ""
       type: games

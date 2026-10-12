@@ -1,0 +1,28 @@
+---
+layout: default
+title: Tin tức
+description: Tin game mới nhất tổng hợp từ các nguồn uy tín, cập nhật hàng ngày.
+---
+
+<section class="container news-page">
+  <div class="section-head">
+    <h2>📰 Tin game mới nhất</h2>
+  </div>
+
+  <div class="news-list">
+    {% for post in site.posts %}
+      <a class="news-row" href="{{ post.url | relative_url }}">
+        <div class="news-row-date">
+          <time>{{ post.date | date: "%d/%m/%Y" }}</time>
+          {% assign main_tag = post.tags | first %}
+          {% if main_tag %}<span class="tag">{{ main_tag }}</span>{% endif %}
+        </div>
+        <div class="news-row-body">
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.description | truncate: 140 }}</p>
+        </div>
+        <span class="news-row-arrow" aria-hidden="true">→</span>
+      </a>
+    {% endfor %}
+  </div>
+</section>

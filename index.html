@@ -8,6 +8,28 @@ title: null
   <p>Hàng trăm game HTML5 nhỏ gọn, không cần cài đặt. Bấm vào một game và chơi ngay!</p>
 </section>
 
+{% if site.posts.size > 0 %}
+<section class="container news-home">
+  <div class="section-head">
+    <h2>📰 Tin game mới</h2>
+    <a class="see-all" href="{{ '/news/' | relative_url }}">Xem tất cả →</a>
+  </div>
+  <div class="news-grid">
+    {% for post in site.posts limit: 4 %}
+      <a class="news-card" href="{{ post.url | relative_url }}">
+        <div class="news-card-top">
+          {% assign main_tag = post.tags | first %}
+          {% if main_tag %}<span class="tag">{{ main_tag }}</span>{% endif %}
+          <time>{{ post.date | date: "%d/%m/%Y" }}</time>
+        </div>
+        <h3>{{ post.title }}</h3>
+        <p>{{ post.description | truncate: 100 }}</p>
+      </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 <section id="games">
   <div class="section-head container" style="padding-left:20px;padding-right:20px">
     <h2>Tất cả game (<span id="game-count">{{ site.games.size }}</span>)</h2>
